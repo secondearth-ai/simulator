@@ -1,0 +1,11 @@
+{
+ "id": "sample-1000",
+ "name": "Sample: KR and US adults",
+ "count": 1000,
+ "countries": {
+  "KR": "한국",
+  "US": "미국"
+ },
+ "note": "All people in this dataset are fictional and AI-generated. Any resemblance to real people is coincidental. Simulated results are not measurements of any real product. 1,000 people drawn with a fixed seed from a larger private set; people whose text mentioned self-harm, psychiatric care, diagnoses, religion, politics or real employer names were left out, so this is not a representative sample.",
+ "created": "2026-11-09"
+}

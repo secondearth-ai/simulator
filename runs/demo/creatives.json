@@ -1,0 +1,62 @@
+[
+ {
+  "id": "a",
+  "angle": "회의가 끝나고 누가 뭘 하기로 했는지 기억나지 않아 난감한 팀원의 순간",
+  "screen": "result",
+  "ko": {
+   "hook": "그래서 그거 누가 하기로 했죠?",
+   "sub": "요약·결정·할 일이 정리돼요",
+   "cta": "노트 보기"
+  },
+  "en": {
+   "hook": "Wait, who's doing that again?",
+   "sub": "Summary, decisions, to-dos. Sorted.",
+   "cta": "See notes"
+  }
+ },
+ {
+  "id": "b",
+  "angle": "행사장 뒷자리에서 발표가 잘 안 들려 답답한 참석자의 순간",
+  "screen": "onboarding",
+  "ko": {
+   "hook": "뒷자리라 안 들린다면",
+   "sub": "QR만 찍으면 자막이 떠요",
+   "cta": "QR 찍기"
+  },
+  "en": {
+   "hook": "Stuck in the back row?",
+   "sub": "Scan the QR. Live captions, no install.",
+   "cta": "Scan QR"
+  }
+ },
+ {
+  "id": "c",
+  "angle": "시험 전날 밤 강의 내용을 정리할 엄두가 안 나는 대학생의 순간",
+  "screen": "result",
+  "ko": {
+   "hook": "시험 전날 밤, 필기가 없다",
+   "sub": "강의를 단어장으로 만들어요",
+   "cta": "단어장 만들기"
+  },
+  "en": {
+   "hook": "Exam tomorrow. Zero notes.",
+   "sub": "Turn lectures into vocab lists.",
+   "cta": "Make list"
+  }
+ },
+ {
+  "id": "d",
+  "angle": "회의가 잦아 무료 시간이 부족해진 직장인이 요금제를 고민하는 순간",
+  "screen": "paywall",
+  "ko": {
+   "hook": "회의는 많고 60분은 짧다",
+   "sub": "Pro는 월 300분, 3일 체험 가능",
+   "cta": "체험 시작"
+  },
+  "en": {
+   "hook": "Too many meetings. Too few minutes.",
+   "sub": "Pro gives 300 min monthly. 3-day trial.",
+   "cta": "Try free"
+  }
+ }
+]

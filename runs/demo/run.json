@@ -1,0 +1,90 @@
+{
+  "id": "demo",
+  "product": "NoteCube",
+  "set": "sample-1000",
+  "days": 30,
+  "facts": "NoteCube는 음성을 녹음하면 실시간으로 받아쓰고 요약·결정·할 일을 정리해 주는 앱이다. 회의나 행사에서 진행자가 녹음을 시작하면 참석자는 QR을 찍어 앱 설치·가입 없이 자막을 보고 끝나면 노트를 받는다. 강의를 단어장으로 만드는 기능이 있다. 무료는 누적 60분, Pro는 주 $9.99 또는 연 $99.99이며 월 300분이다. 연간 요금에는 3일 무료 체험을 제공하는 화면이 있다.",
+  "paidShare": 0.7,
+  "organic": [
+    {
+      "id": "store",
+      "name": "앱스토어 검색",
+      "share": 0.4,
+      "entry": "store"
+    },
+    {
+      "id": "search",
+      "name": "구글 검색",
+      "share": 0.35,
+      "entry": "landing"
+    },
+    {
+      "id": "friend",
+      "name": "지인 링크",
+      "share": 0.25,
+      "entry": "landing"
+    }
+  ],
+  "stages": [
+    {
+      "id": "landing",
+      "title": "랜딩",
+      "image": true
+    },
+    {
+      "id": "pricing",
+      "title": "웹 요금",
+      "image": true
+    },
+    {
+      "id": "store",
+      "title": "앱스토어",
+      "image": true
+    },
+    {
+      "id": "onboarding",
+      "title": "온보딩",
+      "image": true
+    },
+    {
+      "id": "result",
+      "title": "첫 결과",
+      "image": true
+    },
+    {
+      "id": "paywall",
+      "title": "페이월",
+      "image": true
+    },
+    {
+      "id": "trial",
+      "title": "체험·첫 결제",
+      "image": false
+    },
+    {
+      "id": "retain",
+      "title": "30일 유지",
+      "image": false
+    }
+  ],
+  "prices": {
+    "annual": 99.99,
+    "weekly": 9.99,
+    "storeCut": 0.15
+  },
+  "defaults": {
+    "budget": 5000,
+    "cpm": 9,
+    "ctr": 1.2,
+    "adSensitivity": 1,
+    "clickToInstall": 30,
+    "onboardingDone": 65,
+    "firstResult": 40,
+    "paywallConvert": 6,
+    "priceSensitivity": 1,
+    "annualShare": 50,
+    "trialToPaid": 35,
+    "weeklyRenew": 45,
+    "revisit": 1
+  }
+}
