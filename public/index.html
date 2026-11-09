@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ko">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,19 +11,19 @@
   <b class="brand">SecondEarth Simulator</b>
   <span class="dim" id="runInfo"></span>
   <nav class="tabs">
-    <button data-tab="sim" class="on">시뮬레이션</button>
-    <button data-tab="people">페르소나</button>
-    <button data-tab="report">보고서</button>
+    <button data-tab="sim" class="on">Simulation</button>
+    <button data-tab="people">Personas</button>
+    <button data-tab="report">Report</button>
   </nav>
-  <a href="new.html" class="dim">새 시뮬레이션</a>
+  <a href="new.html" class="dim">New run</a>
   <span class="grow"></span>
   <span id="filters" class="filters">
-    <label class="dim">국가 <select id="fCountry"><option value="">전체</option><option value="KR">한국</option><option value="US">미국</option></select></label>
-    <label class="dim">나이 <select id="fAge"><option value="">전체</option><option value="18-24">18-24</option><option value="25-34">25-34</option><option value="35-44">35-44</option><option value="45-54">45-54</option><option value="55-99">55+</option></select></label>
-    <label class="dim">시간대 <select id="fMoment"></select></label>
-    <label class="dim">쪼개 보기 <select id="fSplit"><option value="">없음</option><option value="creative">소재</option><option value="country">국가</option><option value="age">나이</option><option value="sector">분야</option><option value="moment">시간대</option><option value="outcome">결과</option></select></label>
+    <label class="dim">Country <select id="fCountry"><option value="">All</option><option value="KR">Korea</option><option value="US">US</option></select></label>
+    <label class="dim">Age <select id="fAge"><option value="">All</option><option value="18-24">18-24</option><option value="25-34">25-34</option><option value="35-44">35-44</option><option value="45-54">45-54</option><option value="55-99">55+</option></select></label>
+    <label class="dim">When <select id="fMoment"></select></label>
+    <label class="dim">Split <select id="fSplit"><option value="">None</option><option value="creative">Ad</option><option value="country">Country</option><option value="age">Age</option><option value="sector">Sector</option><option value="moment">Moment</option><option value="outcome">Outcome</option></select></label>
   </span>
-  <span class="seg"><button id="mPure" class="on">순수</button><button id="mCal">보정</button></span>
+  <span class="seg"><button id="mPure" class="on">Pure</button><button id="mCal">Calibrated</button></span>
 </header>
 
 <main id="sim" class="view">
@@ -31,12 +31,12 @@
     <div id="cols"></div>
     <canvas id="c"></canvas>
     <div class="timeline">
-      <button id="play">일시정지</button>
+      <button id="play">Pause</button>
       <button id="speed">1x</button>
-      <input id="scrub" type="range" min="0" max="720" step="1" value="0" aria-label="시간 이동">
+      <input id="scrub" type="range" min="0" max="720" step="1" value="0" aria-label="Move through time">
       <b id="clock">D0</b>
-      <span id="followBtn" class="follow" hidden>따라가는 중: <b id="followName"></b> <button id="stopFollow">그만</button></span>
-      <span class="zoomctl"><button id="zOut" aria-label="축소">−</button><button id="zFit">전체</button><button id="zIn" aria-label="확대">+</button></span>
+      <span id="followBtn" class="follow" hidden>Following: <b id="followName"></b> <button id="stopFollow">Stop</button></span>
+      <span class="zoomctl"><button id="zOut" aria-label="Zoom out">−</button><button id="zFit">Fit</button><button id="zIn" aria-label="Zoom in">+</button></span>
     </div>
     <div class="log" id="log"></div>
   </section>
@@ -47,16 +47,16 @@
   <div class="ppl">
     <div class="pplHead"><h1 id="setName"></h1><p class="dim" id="setNote"></p></div>
     <div class="pplFilters">
-      <input id="pQ" placeholder="이름·직무·앱·취향 검색" aria-label="검색">
-      <select id="pCountry"><option value="">국가 전체</option><option value="KR">한국</option><option value="US">미국</option></select>
-      <select id="pAge"><option value="">나이 전체</option><option value="18-24">18-24</option><option value="25-34">25-34</option><option value="35-44">35-44</option><option value="45-54">45-54</option><option value="55-99">55+</option></select>
-      <select id="pGender"><option value="">성별 전체</option><option value="남">남</option><option value="여">여</option></select>
-      <select id="pSector"><option value="">분야 전체</option></select>
+      <input id="pQ" placeholder="Search name, job, app, tastes" aria-label="Search">
+      <select id="pCountry"><option value="">All countries</option><option value="KR">Korea</option><option value="US">US</option></select>
+      <select id="pAge"><option value="">All ages</option><option value="18-24">18-24</option><option value="25-34">25-34</option><option value="35-44">35-44</option><option value="45-54">45-54</option><option value="55-99">55+</option></select>
+      <select id="pGender"><option value="">All genders</option><option value="Male">Male</option><option value="Female">Female</option></select>
+      <select id="pSector"><option value="">All sectors</option></select>
       <b id="pCount"></b>
     </div>
     <div class="dist" id="dist"></div>
     <div class="tableWrap"><table id="pTable"></table></div>
-    <button id="pMore">더 보기</button>
+    <button id="pMore">Load more</button>
   </div>
 </main>
 

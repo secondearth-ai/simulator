@@ -22,7 +22,7 @@ Open http://127.0.0.1:4317. The server listens on 127.0.0.1 only.
 
 This replays `runs/demo`: 1,000 fictional people (500 Korea, 500 US) going through the funnel of NoteCube, our own recording app. No API calls are made. Generating a person's thoughts or a diary of their day needs a key, and the demo ships without a report, so those parts stay empty until you add one.
 
-The viewer and the prompts are in Korean today. An English UI is not built yet.
+The viewer and the prompts are in English. The 500 Korean personas in `runs/demo` actually saw the Korean screens and ads (`screens/ko`, `creatives/*-ko`); the viewer shows the English versions. The demo's persona text and reasons were written in Korean and machine-translated for this repo.
 
 ## Run it on your own product (bring your own OpenRouter key)
 
@@ -84,7 +84,7 @@ Without these, personas behave far too eagerly. With them, the output cannot be 
 ## Limits
 
 - Accuracy has not been validated. No result here has been compared with what real users went on to do.
-- Personas are LLM output and share that model's biases. Some generated text is uneven, and reasons are cut at 30 characters.
+- Personas are LLM output and share that model's biases. Some generated text is uneven. Reasons are cut at 60 characters in new runs; the demo's were cut at 30 Korean characters before translation, so some stop mid-thought.
 - The NoteCube results in `runs/demo` are fictional. They say nothing about how real people respond to NoteCube.
 
 ## Cost

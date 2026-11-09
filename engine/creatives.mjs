@@ -5,11 +5,12 @@ import { chromium } from 'playwright';
 import { chat, writeJson, imageUrl, usage } from './lib.mjs';
 const run = process.argv[2];
 const dir = `runs/${run}`, cfg = JSON.parse(fs.readFileSync(`${dir}/run.json`, 'utf8'));
-const copy = await chat([{ role: 'user', content: `모바일 광고 소재 4개의 문구를 쓴다. 제품에 대한 사실은 아래에 있는 것만 쓴다. 없는 기능, 수치, 보안 주장은 쓰지 않는다.
-제품 사실: ${cfg.facts}
-소재마다 다른 사람의 다른 순간을 노린다. 짧고 구어체인 SNS 말투로 쓴다. 굽신거리지 않는다. 제품 이름은 hook에 넣지 않는다. 설명조 금지.
-각 소재의 screen은 ${cfg.creativeScreens ? cfg.creativeScreens.map(x => `${x.id}(${x.title})`).join(', ') : 'result(회의 요약 결과), onboarding(앱 첫 화면, 무대와 QR), paywall(요금)'} 중 하나다.
-JSON만 출력: {"creatives":[{"id":"a","angle":"누구의 어떤 순간인지 한국어 한 문장","screen":"${cfg.creativeScreens?.[0]?.id || 'result'}","ko":{"hook":"한국어 훅 20자 이내","sub":"한국어 보조 문구 22자 이내","cta":"버튼 8자 이내"},"en":{"hook":"English hook, max 8 words","sub":"English line, max 9 words","cta":"max 3 words"}}]}` }], { model: 'anthropic/claude-sonnet-5.5', reasoning: { effort: 'low' }, max_tokens: 3000 });
+const copy = await chat([{ role: 'user', content: `Write the copy for 4 mobile ad creatives. Use only the product facts below. Do not write features, numbers or security claims that are not there.
+Product facts: ${cfg.facts}
+Each creative targets a different person in a different moment. Write in a short, spoken, social media voice. Do not grovel. Do not put the product name in the hook. Do not sound explanatory.
+Each creative's screen is one of: ${cfg.creativeScreens ? cfg.creativeScreens.map(x => `${x.id} (${x.title})`).join(', ') : 'result (meeting summary result), onboarding (first app screen, stage and QR), paywall (pricing)'}.
+Language: write "angle" and every "en" field in English only. Write every "ko" field in Korean only, because it is the copy for the Korean version of the ad. Do not mix any other language into a field.
+Output JSON only: {"creatives":[{"id":"a","angle":"one sentence on whose moment this is","screen":"${cfg.creativeScreens?.[0]?.id || 'result'}","ko":{"hook":"Korean hook, max 20 characters","sub":"Korean supporting line, max 22 characters","cta":"button, max 8 characters"},"en":{"hook":"English hook, max 8 words","sub":"English line, max 9 words","cta":"max 3 words"}}]}` }], { model: 'anthropic/claude-sonnet-5.5', reasoning: { effort: 'low' }, max_tokens: 3000 });
 // The model only picks from the listed screens, but a wrong id should not lose the whole batch.
 if (cfg.creativeScreens) for (const c of copy.creatives) if (!cfg.creativeScreens.some(x => x.id === c.screen)) c.screen = cfg.creativeScreens[0].id;
 const esc = s => String(s ?? '').replace(/[&<>"]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[m]));

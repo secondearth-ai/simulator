@@ -3,9 +3,9 @@
 (function (root) {
   const seeded = seed => { let s = seed >>> 0; return () => { s = (s + 0x6D2B79F5) >>> 0; let t = s; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; };
   const num = (v, d) => { const n = Number(v); return Number.isFinite(n) ? n : d; };
-  const AD_APP = /instagram|인스타|youtube|유튜브|tiktok|틱톡|facebook|페이스북|threads|스레드|naver|네이버|reddit|kakao|카카오|snapchat|pinterest|핀터레스트|^x$/i;
-  const NO_COMMUTE = new Set(['은퇴', '주부·육아 중', '구직 중']);
-  const DAYTIME = { 은퇴: '산책과 집안일', '주부·육아 중': '육아와 집안일', '구직 중': '구직 준비' };
+  const AD_APP = /instagram|youtube|tiktok|facebook|threads|naver|reddit|kakao|snapchat|pinterest|^x$/i;
+  const NO_COMMUTE = new Set(['Retired', 'Homemaker or parenting', 'Job seeking']);
+  const DAYTIME = { Retired: 'Walks and housework', 'Homemaker or parenting': 'Childcare and housework', 'Job seeking': 'Job hunting' };
 
   function plan(p, day) {
     const r = seeded(p.id * 1009 + day * 7919 + 3);
@@ -13,7 +13,7 @@
     const c = p.commute || {};
     let leave = num(c.leave, 8), back = num(c.back, 18);
     const mins = Math.max(0, num(c.minutes, 0));
-    const student = p.sector === '대학생·대학원생';
+    const student = p.sector === 'College & grad students';
     const worker = !NO_COMMUTE.has(p.sector) && leave >= 4 && leave <= 12 && back > 12;
     const seg = [];
     const add = (from, to, kind, label) => { if (to > from) seg.push({ from, to, kind, label }); };
@@ -21,32 +21,32 @@
       const v = r();
       const bed = 23 + r() * 0.9;
       let cur = from;
-      if (v < 0.1) { add(cur, cur + 2.3, 'dine', student ? '친구들과 저녁 식사' : '동료와 저녁 식사'); cur += 2.3; }
-      else if (v < 0.2) { add(cur, cur + 2.5, 'friends', '친구 만남'); cur += 2.5; }
-      else if (v < 0.32) { add(cur, cur + 1.2, 'exercise', '운동'); cur += 1.2; }
-      else if (v < 0.42) { add(cur, cur + 0.8, 'errand', '장보기'); cur += 0.8; }
-      if (cur < 24) add(cur, Math.max(cur, bed), 'rest', '집에서 쉼');
-      add(Math.max(cur, bed), 24, 'sleep', '잠');
+      if (v < 0.1) { add(cur, cur + 2.3, 'dine', student ? 'Dinner with friends' : 'Dinner with coworkers'); cur += 2.3; }
+      else if (v < 0.2) { add(cur, cur + 2.5, 'friends', 'Seeing friends'); cur += 2.5; }
+      else if (v < 0.32) { add(cur, cur + 1.2, 'exercise', 'Exercise'); cur += 1.2; }
+      else if (v < 0.42) { add(cur, cur + 0.8, 'errand', 'Grocery shopping'); cur += 0.8; }
+      if (cur < 24) add(cur, Math.max(cur, bed), 'rest', 'Resting at home');
+      add(Math.max(cur, bed), 24, 'sleep', 'Asleep');
     };
     if (weekend) {
       const wake = 8 + r() * 2.5;
-      add(0, wake, 'sleep', '잠'); add(wake, 12.5, 'rest', '집에서 쉼'); add(12.5, 13.5, 'lunch', '점심');
-      const v = r(), lab = v < 0.25 ? ['friends', '친구 만남'] : v < 0.45 ? ['family', '가족과 나들이'] : v < 0.6 ? ['errand', '쇼핑'] : v < 0.72 ? ['exercise', '운동'] : ['rest', '집에서 쉼'];
+      add(0, wake, 'sleep', 'Asleep'); add(wake, 12.5, 'rest', 'Resting at home'); add(12.5, 13.5, 'lunch', 'Lunch');
+      const v = r(), lab = v < 0.25 ? ['friends', 'Seeing friends'] : v < 0.45 ? ['family', 'Family outing'] : v < 0.6 ? ['errand', 'Shopping'] : v < 0.72 ? ['exercise', 'Exercise'] : ['rest', 'Resting at home'];
       add(13.5, 18, lab[0], lab[1]);
-      if (r() < 0.3) { add(18, 20, 'dine', '외식'); evening(20); } else evening(18);
+      if (r() < 0.3) { add(18, 20, 'dine', 'Eating out'); evening(20); } else evening(18);
     } else if (worker) {
       const wake = Math.max(4, leave - 0.9), arrive = leave + mins / 60, home = back + mins / 60;
-      add(0, wake, 'sleep', '잠'); add(wake, leave, 'ready', '출근 준비');
-      if (mins) add(leave, arrive, 'commute', `${c.mode || '이동'}로 ${student ? '등교' : '출근'}`);
-      const job = student ? '수업' : '근무';
-      add(arrive, 12, 'work', job); add(Math.max(arrive, 12), 13, 'lunch', '점심');
+      add(0, wake, 'sleep', 'Asleep'); add(wake, leave, 'ready', 'Getting ready for work');
+      if (mins) add(leave, arrive, 'commute', `${student ? 'Going to class' : 'Commuting to work'}: ${c.mode || 'Travel'}`);
+      const job = student ? 'Class' : 'Work';
+      add(arrive, 12, 'work', job); add(Math.max(arrive, 12), 13, 'lunch', 'Lunch');
       add(13, back, 'work', job);
-      if (mins) add(back, home, 'commute', `${c.mode || '이동'}로 ${student ? '귀가' : '퇴근'}`);
+      if (mins) add(back, home, 'commute', `${student ? 'Heading home' : 'Commuting home'}: ${c.mode || 'Travel'}`);
       evening(Math.max(home, 13));
     } else {
       const wake = 7 + r() * 2;
-      const label = DAYTIME[p.sector] || '일과';
-      add(0, wake, 'sleep', '잠'); add(wake, 9.5, 'ready', '아침 준비'); add(9.5, 12, 'day', label); add(12, 13, 'lunch', '점심'); add(13, 18, 'day', label);
+      const label = DAYTIME[p.sector] || 'Daily routine';
+      add(0, wake, 'sleep', 'Asleep'); add(wake, 9.5, 'ready', 'Morning routine'); add(9.5, 12, 'day', label); add(12, 13, 'lunch', 'Lunch'); add(13, 18, 'day', label);
       evening(18);
     }
     seg.sort((a, b) => a.from - b.from);
@@ -54,7 +54,7 @@
   }
 
   function sessions(p, day, seg, r) {
-    const apps = p.apps && p.apps.length ? p.apps : ['유튜브'];
+    const apps = p.apps && p.apps.length ? p.apps : ['YouTube'];
     const adApps = apps.filter(a => AD_APP.test(a));
     const hours = new Set((p.phoneHours || []).map(h => Math.floor(num(h, -1))));
     const out = [];

@@ -3,24 +3,24 @@
   "product": "NoteCube",
   "set": "sample-1000",
   "days": 30,
-  "facts": "NoteCube는 음성을 녹음하면 실시간으로 받아쓰고 요약·결정·할 일을 정리해 주는 앱이다. 회의나 행사에서 진행자가 녹음을 시작하면 참석자는 QR을 찍어 앱 설치·가입 없이 자막을 보고 끝나면 노트를 받는다. 강의를 단어장으로 만드는 기능이 있다. 무료는 누적 60분, Pro는 주 $9.99 또는 연 $99.99이며 월 300분이다. 연간 요금에는 3일 무료 체험을 제공하는 화면이 있다.",
+  "facts": "NoteCube is an app that records voice, transcribes it in real time, and organizes it into a summary, decisions and to-dos. When a host starts a recording at a meeting or event, attendees scan a QR code to see captions with no app install or sign-up, and receive the notes when it ends. It has a feature that turns lectures into vocab lists. Free is 60 minutes in total. Pro is $9.99 per week or $99.99 per year, with 300 minutes per month. There is a screen offering a 3-day free trial on the annual price.",
   "paidShare": 0.7,
   "organic": [
     {
       "id": "store",
-      "name": "앱스토어 검색",
+      "name": "App store search",
       "share": 0.4,
       "entry": "store"
     },
     {
       "id": "search",
-      "name": "구글 검색",
+      "name": "Google search",
       "share": 0.35,
       "entry": "landing"
     },
     {
       "id": "friend",
-      "name": "지인 링크",
+      "name": "Link from someone they know",
       "share": 0.25,
       "entry": "landing"
     }
@@ -28,42 +28,42 @@
   "stages": [
     {
       "id": "landing",
-      "title": "랜딩",
+      "title": "Landing",
       "image": true
     },
     {
       "id": "pricing",
-      "title": "웹 요금",
+      "title": "Pricing",
       "image": true
     },
     {
       "id": "store",
-      "title": "앱스토어",
+      "title": "App Store",
       "image": true
     },
     {
       "id": "onboarding",
-      "title": "온보딩",
+      "title": "Onboarding",
       "image": true
     },
     {
       "id": "result",
-      "title": "첫 결과",
+      "title": "Result",
       "image": true
     },
     {
       "id": "paywall",
-      "title": "페이월",
+      "title": "Paywall",
       "image": true
     },
     {
       "id": "trial",
-      "title": "체험·첫 결제",
+      "title": "Trial",
       "image": false
     },
     {
       "id": "retain",
-      "title": "30일 유지",
+      "title": "Retention",
       "image": false
     }
   ],

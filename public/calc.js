@@ -95,8 +95,8 @@
       const allowed = Math.round(here.length * rule.rate);
       notes[rule.s] = { pure: safe(forward.length, here.length), target: rule.rate, capped: forward.length < allowed };
       for (const h of forward.slice(allowed)) {
-        h.a.v = h.a.v.slice(0, h.i).concat([{ ...h.x, a: rule.stop, tag: `보정 탈락: ${h.x.tag}`, cal: true, installed: false }]);
-        if (rule.s === 'paywall') h.a.v.push({ s: 'retain', t: h.x.t + 1, a: 'free_active', p: 50, att: 50, tag: '무료로 계속 사용', cal: true });
+        h.a.v = h.a.v.slice(0, h.i).concat([{ ...h.x, a: rule.stop, tag: `Calibrated out: ${h.x.tag}`, cal: true, installed: false }]);
+        if (rule.s === 'paywall') h.a.v.push({ s: 'retain', t: h.x.t + 1, a: 'free_active', p: 50, att: 50, tag: 'Keeps using it free', cal: true });
       }
     }
     if (g.revisit < 1) for (const a of out) {

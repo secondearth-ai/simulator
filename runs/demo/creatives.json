@@ -1,7 +1,7 @@
 [
  {
   "id": "a",
-  "angle": "회의가 끝나고 누가 뭘 하기로 했는지 기억나지 않아 난감한 팀원의 순간",
+  "angle": "A teammate at a loss after a meeting, unable to remember who agreed to do what",
   "screen": "result",
   "ko": {
    "hook": "그래서 그거 누가 하기로 했죠?",
@@ -16,7 +16,7 @@
  },
  {
   "id": "b",
-  "angle": "행사장 뒷자리에서 발표가 잘 안 들려 답답한 참석자의 순간",
+  "angle": "An attendee in the back row of an event, frustrated at not being able to hear the talk",
   "screen": "onboarding",
   "ko": {
    "hook": "뒷자리라 안 들린다면",
@@ -31,7 +31,7 @@
  },
  {
   "id": "c",
-  "angle": "시험 전날 밤 강의 내용을 정리할 엄두가 안 나는 대학생의 순간",
+  "angle": "A college student the night before an exam, too daunted to organize the lecture material",
   "screen": "result",
   "ko": {
    "hook": "시험 전날 밤, 필기가 없다",
@@ -46,7 +46,7 @@
  },
  {
   "id": "d",
-  "angle": "회의가 잦아 무료 시간이 부족해진 직장인이 요금제를 고민하는 순간",
+  "angle": "An office worker with frequent meetings, running out of free minutes and weighing a paid plan",
   "screen": "paywall",
   "ko": {
    "hook": "회의는 많고 60분은 짧다",

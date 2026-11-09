@@ -11,11 +11,11 @@ const defaultRun = process.argv[2] || 'demo';
 const port = Number(process.env.PORT || 4317);
 const jsonl = f => fs.existsSync(f) ? fs.readFileSync(f, 'utf8').trim().split('\n').filter(Boolean).map(l => JSON.parse(l)) : [];
 const types = { '.html': 'text/html; charset=utf-8', '.jpg': 'image/jpeg', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8' };
-const ACTION = { click: '광고를 눌렀다', skip: '광고를 넘겼다', next: '다음으로 넘어갔다', store: '앱 받기를 눌렀다', leave: '떠났다', install: '설치했다', annual: '연간 무료 체험을 시작했다', weekly: '주간 구독을 시작했다', free: '닫고 무료로 쓰기로 했다', pay: '결제를 유지했다', cancel: '해지했다', keep: '구독을 유지했다', open: '앱을 다시 열었다', drop: '앱을 더 열지 않기로 했다' };
+const ACTION = { click: 'clicked the ad', skip: 'skipped the ad', next: 'moved on to the next step', store: 'tapped get the app', leave: 'left', install: 'installed it', annual: 'started the annual free trial', weekly: 'started the weekly plan', free: 'closed it and chose to stay free', pay: 'kept the payment', cancel: 'canceled', keep: 'kept the subscription', open: 'reopened the app', drop: 'decided not to open the app again' };
 
 const setCache = new Map();
 function loadSet(id) {
-  if (!ID_RE.test(id || '') || !fs.existsSync(`sets/${id}/personas.jsonl`)) throw Object.assign(new Error('페르소나 세트를 찾지 못했습니다.'), { status: 404 });
+  if (!ID_RE.test(id || '') || !fs.existsSync(`sets/${id}/personas.jsonl`)) throw Object.assign(new Error('Persona set not found.'), { status: 404 });
   const mtime = fs.statSync(`sets/${id}/personas.jsonl`).mtimeMs;
   const hit = setCache.get(id);
   if (hit?.mtime === mtime) return hit.people;
@@ -27,7 +27,7 @@ function loadSet(id) {
 // One loaded run. Walks are a snapshot from when it loaded; opening the page again picks up a run that has since moved on.
 const runCache = new Map();
 function loadRun(id, refresh = false) {
-  if (!ID_RE.test(id || '') || !fs.existsSync(`runs/${id}/run.json`)) throw Object.assign(new Error(`실행을 찾지 못했습니다: ${String(id).slice(0, 64)}`), { status: 404 });
+  if (!ID_RE.test(id || '') || !fs.existsSync(`runs/${id}/run.json`)) throw Object.assign(new Error(`Run not found: ${String(id).slice(0, 64)}`), { status: 404 });
   const dir = `runs/${id}`, walksFile = `${dir}/walks.jsonl`;
   const mtime = fs.existsSync(walksFile) ? fs.statSync(walksFile).mtimeMs : 0;
   const hit = runCache.get(id);
@@ -73,7 +73,7 @@ function people(R, q) {
   return { stats: stats(list), rows: list.slice(offset, offset + 80).map(p => ({ id: p.id, name: p.name, age: p.age, gender: p.gender, city: p.city, job: p.job, disposable: p.disposableMonthly, apps: (p.apps || []).slice(0, 4) })) };
 }
 
-const needKey = () => { if (!process.env.OPENROUTER_API_KEY) throw Object.assign(new Error('OPENROUTER_API_KEY가 있어야 생성됩니다. 키 없이는 재생만 됩니다. (Needs OPENROUTER_API_KEY. Replay works without it.)'), { status: 400 }); };
+const needKey = () => { if (!process.env.OPENROUTER_API_KEY) throw Object.assign(new Error('Needs OPENROUTER_API_KEY. Replay works without it.'), { status: 400 }); };
 
 async function dayStory(R, id, day) {
   const key = `day:${id}:${day}`;
@@ -81,12 +81,12 @@ async function dayStory(R, id, day) {
   needKey();
   const p = R.byId.get(id), w = R.walks.get(id), cfg = R.cfg;
   const plan = globalThis.Life.plan(p, day);
-  const acts = (w?.visits || []).filter(v => Math.floor(v.t / 24) === day).map(v => `${Math.floor(v.t % 24)}시 ${v.stage === 'ad' ? `${v.app}에서 ${cfg.product} 광고를 봤고` : `${v.stage} 화면에서`} ${ACTION[v.action] || v.action} (${v.tag})`);
-  const text = await chat([{ role: 'user', content: `${p.name}(${p.age}세, ${p.job}, ${p.city})의 이날 하루를 3문장으로 쓴다. 평범하고 구체적으로, 일기처럼 1인칭으로. 한국어로만, 중국어·영어 금지.
-가족: ${p.household}. 요즘 목표: ${p.goal} 스트레스: ${p.stress} 말투: ${p.voice}
-일정: ${plan.segments.filter(s => s.kind !== 'sleep').map(s => `${Math.floor(s.from)}시 ${s.label}`).join(', ')}
-앱 사용: ${plan.sessions.slice(0, 6).map(s => `${Math.floor(s.h)}시 ${s.app}`).join(', ')}
-${acts.length ? `이날 ${cfg.product} 관련 일: ${acts.join('; ')}` : `이날 ${cfg.product}와 관련된 일은 없었다. 언급하지 않는다.`}` }], { json: false, max_tokens: 300, temperature: 0.9 });
+  const acts = (w?.visits || []).filter(v => Math.floor(v.t / 24) === day).map(v => `at ${Math.floor(v.t % 24)}:00, ${v.stage === 'ad' ? `saw a ${cfg.product} ad in ${v.app} and` : `on the ${v.stage} screen,`} ${ACTION[v.action] || v.action} (${v.tag})`);
+  const text = await chat([{ role: 'user', content: `Write this day in the life of ${p.name} (age ${p.age}, ${p.job}, ${p.city}) in 3 sentences. Ordinary and concrete, in the first person, like a diary. Write in English only. Do not mix in any other language.
+Household: ${p.household}. Current goal: ${p.goal} Stress: ${p.stress} Way of speaking: ${p.voice}
+Schedule: ${plan.segments.filter(s => s.kind !== 'sleep').map(s => `${Math.floor(s.from)}:00 ${s.label}`).join(', ')}
+App use: ${plan.sessions.slice(0, 6).map(s => `${Math.floor(s.h)}:00 ${s.app}`).join(', ')}
+${acts.length ? `Things related to ${cfg.product} this day: ${acts.join('; ')}` : `Nothing related to ${cfg.product} happened this day. Do not mention it.`}` }], { json: false, max_tokens: 300, temperature: 0.9 });
   R.thoughts[key] = text.trim();
   fs.writeFileSync(R.thoughtsFile, JSON.stringify(R.thoughts, null, 1));
   return R.thoughts[key];
@@ -99,9 +99,9 @@ async function thought(R, id, i) {
   const p = R.byId.get(id), w = R.walks.get(id), v = w?.visits[i];
   if (!v) throw new Error('no such step');
   const image = v.stage === 'ad' ? `${R.dir}/creatives/${v.creative}-${w.lang}.jpg` : R.cfg.stages.find(s => s.id === v.stage)?.image ? `${R.dir}/screens/${w.lang}/${v.stage}.jpg` : null;
-  const parts = [{ type: 'text', text: `너는 ${p.name}(${p.age}세, ${p.job}, ${p.city})이다. 가족: ${p.household}. 자유 지출 ${p.disposableMonthly}. 쓰는 앱: ${(p.apps || []).join(', ')}. 요즘 목표: ${p.goal} 스트레스: ${p.stress} 평소 말투: ${p.voice} 평소 하는 말: "${p.quote}"
-${image ? '첨부한 화면을 보고' : '구독을 두고'} 너는 이미 이렇게 행동했다: ${ACTION[v.action] || v.action}. 당시 이유 메모: "${v.tag}". 집중도 ${v.att}/100.
-그 순간 머릿속 혼잣말을 이 사람 말투로 2~3문장 쓴다. ${image ? '화면에 실제로 보이는 문구나 가격을 하나 이상 짚는다.' : ''} 이 사람의 실제 일상을 하나 언급한다. 행동을 뒤집지 않는다. 한국어로만, 중국어·영어 금지, 따옴표 없이.` }];
+  const parts = [{ type: 'text', text: `You are ${p.name} (age ${p.age}, ${p.job}, ${p.city}). Household: ${p.household}. Free to spend: ${p.disposableMonthly}. Apps you use: ${(p.apps || []).join(', ')}. Current goal: ${p.goal} Stress: ${p.stress} Usual way of speaking: ${p.voice} Something you often say: "${p.quote}"
+${image ? 'Looking at the attached screen,' : 'About the subscription,'} you already acted like this: ${ACTION[v.action] || v.action}. Your note on why at the time: "${v.tag}". Attention ${v.att}/100.
+Write what went through your head at that moment, 2 to 3 sentences in this person's way of speaking. ${image ? 'Point to at least one phrase or price actually visible on the screen, translated into English if the screen is in another language.' : ''} Mention one thing from this person's real daily life. Do not reverse the action. Write in English only, do not mix in any other language, no quotation marks.` }];
   if (image) parts.push({ type: 'image_url', image_url: { url: imageUrl(image) } });
   R.thoughts[key] = (await chat([{ role: 'user', content: parts }], { json: false, max_tokens: 400, temperature: 0.8 })).trim();
   fs.writeFileSync(R.thoughtsFile, JSON.stringify(R.thoughts, null, 1));
@@ -130,7 +130,7 @@ const serverKey = req => !!process.env.OPENROUTER_API_KEY && isLocal(req);
 function readBody(req, limit) {
   return new Promise((resolve, reject) => {
     const chunks = []; let n = 0;
-    req.on('data', c => { n += c.length; if (n > limit) { reject(Object.assign(new Error('파일이 너무 큽니다.'), { status: 413 })); req.destroy(); } else chunks.push(c); });
+    req.on('data', c => { n += c.length; if (n > limit) { reject(Object.assign(new Error('File is too large.'), { status: 413 })); req.destroy(); } else chunks.push(c); });
     req.on('end', () => resolve(Buffer.concat(chunks)));
     req.on('error', reject);
   });
@@ -138,32 +138,32 @@ function readBody(req, limit) {
 // JSON.parse errors quote the input, and this body can hold the key, so the error is replaced.
 async function readJsonBody(req) {
   const buf = await readBody(req, 2e6);
-  try { return JSON.parse(buf.toString('utf8')); } catch { throw Object.assign(new Error('요청 형식이 올바르지 않습니다.'), { status: 400 }); }
+  try { return JSON.parse(buf.toString('utf8')); } catch { throw Object.assign(new Error('Malformed request.'), { status: 400 }); }
 }
 
 async function start(req) {
   const f = await readJsonBody(req);
   const key = String(f.key || '').trim();
-  if (!key && !serverKey(req)) throw Object.assign(new Error('OpenRouter 키를 입력해 주세요.'), { status: 400 });
-  if (isBusy()) throw Object.assign(new Error('이미 돌고 있는 실행이 있습니다. 끝난 뒤 다시 시도해 주세요.'), { status: 409 });
+  if (!key && !serverKey(req)) throw Object.assign(new Error('Please enter an OpenRouter key.'), { status: 400 });
+  if (isBusy()) throw Object.assign(new Error('A run is already in progress. Please try again when it finishes.'), { status: 409 });
   const ns = f.persona?.newSet;
   if (ns) {
-    if (!ID_RE.test(ns.id || '')) throw Object.assign(new Error('새 세트 이름은 영문·숫자·-·_ 로 입력해 주세요.'), { status: 400 });
-    if (fs.existsSync(`sets/${ns.id}`)) throw Object.assign(new Error('같은 이름의 세트가 이미 있습니다.'), { status: 400 });
+    if (!ID_RE.test(ns.id || '')) throw Object.assign(new Error('A new set name can use letters, numbers, - and _ only.'), { status: 400 });
+    if (fs.existsSync(`sets/${ns.id}`)) throw Object.assign(new Error('A set with that name already exists.'), { status: 400 });
     ns.count = Math.max(1, Math.min(MAX_PEOPLE, Number(ns.count) || 0));
   }
   const setId = ns ? ns.id : f.persona?.set;
   const audience = ns ? {} : (f.persona?.filters || {});
   const count = Math.max(1, Math.min(MAX_PEOPLE, Number(f.persona?.count) || 200));
-  if (!ns && !matchAudience(loadSet(setId), audience).length) throw Object.assign(new Error('조건에 맞는 페르소나가 없습니다. 필터를 줄여 주세요.'), { status: 400 });
+  if (!ns && !matchAudience(loadSet(setId), audience).length) throw Object.assign(new Error('No personas match. Please loosen the filters.'), { status: 400 });
   const uploaded = f.ads?.mode === 'upload' ? (f.ads.items || []) : [];
-  if (f.ads?.mode === 'upload' && !uploaded.length) throw Object.assign(new Error('광고 소재 이미지를 한 장 이상 올려 주세요.'), { status: 400 });
+  if (f.ads?.mode === 'upload' && !uploaded.length) throw Object.assign(new Error('Please upload at least one ad image.'), { status: 400 });
   const { cfg, notes } = buildRun({ ...f, budget: f.ads?.budget, audience: { ...audience, count } });
   cfg.set = setId;
   if (ns) cfg.newSet = true;
   const model = String(f.model || '').trim();
   if (model) {
-    if (!/^[\w.-]+\/[\w.:-]+$/.test(model)) throw Object.assign(new Error('모델 이름 형식이 올바르지 않습니다. 예: qwen/qwen3.7-flash'), { status: 400 });
+    if (!/^[\w.-]+\/[\w.:-]+$/.test(model)) throw Object.assign(new Error('Invalid model name. Example: qwen/qwen3.7-flash'), { status: 400 });
     cfg.model = model;
   }
   if (key) await verifyKey(key);
@@ -182,7 +182,7 @@ http.createServer(async (req, res) => {
       const fetchSite = req.headers['sec-fetch-site'];
       const localHost = /^(127\.0\.0\.1|localhost)(:\d+)?$/.test(req.headers.host || '');
       const crossOrigin = req.headers.origin && new URL(req.headers.origin).host !== req.headers.host;
-      if (!localHost || crossOrigin || (fetchSite && !['same-origin', 'none'].includes(fetchSite))) return send(res, { error: '다른 사이트에서 온 요청입니다.' }, 403);
+      if (!localHost || crossOrigin || (fetchSite && !['same-origin', 'none'].includes(fetchSite))) return send(res, { error: 'Request came from another site.' }, 403);
     }
     if (req.method === 'POST') {
       if (url.pathname === '/api/draft') return send(res, { draft: newDraft() });
@@ -197,7 +197,7 @@ http.createServer(async (req, res) => {
     if (url.pathname === '/api/sets') return send(res, listSets());
     if (url.pathname === '/api/set') return send(res, setDetail(q.get('id')));
     if (url.pathname === '/api/audience') return send(res, { matched: matchAudience(loadSet(q.get('set')), { countries: q.getAll('country'), sectors: q.getAll('sector'), ageMin: q.get('ageMin'), ageMax: q.get('ageMax'), text: q.get('text') }).length });
-    if (url.pathname === '/api/job') { const j = jobStatus(q.get('id')); return j ? send(res, j) : send(res, { error: '작업을 찾지 못했습니다.' }, 404); }
+    if (url.pathname === '/api/job') { const j = jobStatus(q.get('id')); return j ? send(res, j) : send(res, { error: 'Job not found.' }, 404); }
     if (url.pathname === '/api/job/people') return send(res, jobPeople(q.get('id'), Math.max(0, Number(q.get('from')) || 0), Math.min(500, Number(q.get('limit')) || 100), loadSet));
     if (url.pathname === '/api/run') return send(res, bundle(loadRun(pickRun(req, q), true)));
     if (url.pathname === '/api/report') { const { dir } = loadRun(pickRun(req, q)); return send(res, fs.existsSync(`${dir}/report.json`) ? readJson(`${dir}/report.json`) : {}); }

@@ -11,6 +11,7 @@ button:hover, select:hover { border-color: var(--dim); }
 button:focus-visible, select:focus-visible, input:focus-visible { outline: 1px solid var(--sel); outline-offset: 1px; }
 .dim { color: var(--dim); }
 .grow { flex: 1; }
+@media (max-width: 1500px) { #runInfo { display: none; } }
 .bar { height: 42px; display: flex; align-items: center; gap: 12px; padding: 0 14px; border-bottom: 1px solid var(--line); white-space: nowrap; overflow: hidden; }
 .brand { font-size: 14px; }
 .tabs { display: flex; gap: 2px; }
