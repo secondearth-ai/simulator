@@ -2,7 +2,7 @@
 
 Fictional AI personas see your ad, walk your funnel, and decide to stay, pay, or leave over 30 simulated days. You watch them as dots and click any dot to read who that person is and why they stopped.
 
-<!-- hero: ![Replay view](docs/hero.jpg) -->
+![Replay view](docs/hero.jpg)
 
 **This is a simulation, not a prediction.** Its accuracy has not been validated against real outcomes. Use it to find what to test next, not to forecast revenue.
 
