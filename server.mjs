@@ -61,7 +61,7 @@ const bundle = R => (R.cache ||= JSON.stringify({ cfg: R.cfg, creatives: readJso
 function stats(list) {
   const count = (fn, top = 12) => { const m = new Map(); for (const p of list) for (const k of [].concat(fn(p) || [])) m.set(k, (m.get(k) || 0) + 1); return [...m].sort((a, b) => b[1] - a[1]).slice(0, top); };
   const band = a => a < 25 ? '18-24' : a < 35 ? '25-34' : a < 45 ? '35-44' : a < 55 ? '45-54' : '55+';
-  return { n: list.length, age: count(band, 5).sort((a, b) => a[0].localeCompare(b[0])), gender: count(p => p.gender), sector: count(p => p.sector, 10), apps: count(p => p.apps, 12), subs: count(p => (p.subscriptions || []).map(s => s.name), 10), city: count(p => p.city, 8) };
+  return { n: list.length, age: count(p => band(p.age), 5).sort((a, b) => a[0].localeCompare(b[0])), gender: count(p => p.gender), sector: count(p => p.sector, 10), apps: count(p => p.apps, 12), subs: count(p => (p.subscriptions || []).map(s => s.name), 10), city: count(p => p.city, 8) };
 }
 function people(R, q) {
   const f = k => q.get(k) || '';
