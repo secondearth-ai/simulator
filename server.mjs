@@ -177,9 +177,14 @@ http.createServer(async (req, res) => {
   const url = new URL(req.url, 'http://x');
   const q = url.searchParams;
   try {
+    // Thoughts and runs spend the owner's key, so only this machine's own pages may call the API, on GET as well as POST.
+    if (url.pathname.startsWith('/api/')) {
+      const fetchSite = req.headers['sec-fetch-site'];
+      const localHost = /^(127\.0\.0\.1|localhost)(:\d+)?$/.test(req.headers.host || '');
+      const crossOrigin = req.headers.origin && new URL(req.headers.origin).host !== req.headers.host;
+      if (!localHost || crossOrigin || (fetchSite && !['same-origin', 'none'].includes(fetchSite))) return send(res, { error: '다른 사이트에서 온 요청입니다.' }, 403);
+    }
     if (req.method === 'POST') {
-      // Stops another website from starting paid work through a visitor's browser.
-      if (req.headers.origin && new URL(req.headers.origin).host !== req.headers.host) return send(res, { error: '다른 사이트에서 온 요청입니다.' }, 403);
       if (url.pathname === '/api/draft') return send(res, { draft: newDraft() });
       if (url.pathname === '/api/capture') { const b = await readJsonBody(req); return send(res, { screens: await captureUrl(b.draft, b.url, b.shots) }); }
       if (url.pathname === '/api/upload') { const buf = await readBody(req, 20e6); return send(res, { id: await ingestImage(q.get('draft'), buf, req.headers['content-type'], q.get('kind')) }); }

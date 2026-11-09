@@ -2,7 +2,9 @@
 
 Fictional AI personas see your ad, walk your funnel, and decide to stay, pay, or leave over 30 simulated days. You watch them as dots and click any dot to read who that person is and why they stopped.
 
-![Replay view](docs/hero.jpg)
+![Dots moving through the funnel, then one person's record opening](docs/demo.gif)
+
+**[Try the live demo](https://www.secondearth.io/simulator)** · **[Watch the video](https://www.youtube.com/watch?v=_0CNMX3_Q0o)**
 
 **This is a simulation, not a prediction.** Its accuracy has not been validated against real outcomes. Use it to find what to test next, not to forecast revenue.
 
@@ -87,12 +89,12 @@ Without these, personas behave far too eagerly. With them, the output cannot be 
 
 ## Cost
 
-These are logged OpenRouter charges from one run at the default model, `qwen/qwen3.7-flash`.
+These are logged OpenRouter charges from one run.
 
 | Step | Logged cost |
 |---|---|
-| Create 10,000 personas | $7.46 |
-| Simulate 30 days | $1.099 at 6,500 people, about $0.17 per 1,000 |
+| Create 10,000 personas with Claude Haiku 5.5 | $7.46 |
+| Simulate 30 days with `qwen/qwen3.7-flash`, the default model | $1.099 at 6,500 people, about $0.17 per 1,000 |
 
 The simulation figure comes from a progress line in the log, because that run did not log a final total. Report and thought generation costs were not logged. Ad copy uses `anthropic/claude-sonnet-5.5` and costs extra. Your cost will vary with image size and prices.
 
