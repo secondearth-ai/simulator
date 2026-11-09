@@ -1,0 +1,10 @@
+node_modules
+.env
+.DS_Store
+*.log
+drafts/
+sets/*
+!sets/sample-1000/
+runs/*
+!runs/demo/
+runs/demo/thoughts.json
