@@ -1,0 +1,20 @@
+SecondEarth Simulator
+Copyright 2026 SecondEarth
+
+The source code in this repository is licensed under the Apache License,
+Version 2.0. See LICENSE.
+
+The following are NOT covered by the Apache License:
+
+1. NoteCube materials. The images in runs/demo/screens and runs/demo/creatives,
+   the product description in runs/demo/run.json and runs/demo/creatives.json,
+   and the names and logos of NoteCube and SecondEarth belong to SecondEarth.
+   All rights reserved. They are included only so the demo can replay.
+
+2. Third-party marks. The App Store page captures in runs/demo/screens show
+   marks that belong to their respective owners, including Apple.
+
+Sample data. sets/sample-1000 and runs/demo/walks.jsonl are made available under
+Creative Commons Attribution 4.0 (CC BY 4.0). All people in this dataset are
+fictional and AI-generated. Any resemblance to real people is coincidental.
+Simulated results are not measurements of any real product, including NoteCube.
